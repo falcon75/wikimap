@@ -187,4 +187,4 @@ class Mapper:
 m = Mapper()
 # m.map(3, 10, "Mathematics", "3_10_mathematics")
 m.load('3_10_mathematics')
-m.drawx(thresh=12)
+m.draw(thresh=12)

@@ -33,12 +33,11 @@ class TopicGraph:
 
   def step(self, dt=0.1 ):
 
+    self.f = 0.1 * (-1*self.r + self.f[0])
+
     for n in np.argwhere(self.graph.c.sum(axis=1) != 0):
 
-      self.f[n] = np.array([0, 0])
-
       self.f[n] += self.k * np.dot(self.graph.c[n], self.r - self.r[n])
-
       self.v[n] += dt * self.f[n]
       new_x = self.r[n] + dt * self.v[n]
 
@@ -70,8 +69,7 @@ class TopicGraph:
       ax.add_patch(circ)
       if lines:
         pass
-      print(self.r[i], type(self.graph.names_arr), i)
-      ax.text(*self.r[i], self.graph.names_arr[i], horizontalalignment='center', verticalalignment='center')
+      # ax.text(*self.r[i], self.graph.names_arr[i], horizontalalignment='center', verticalalignment='center')
 
 
 

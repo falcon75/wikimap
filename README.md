@@ -9,3 +9,6 @@ Graphically represent with NetworkX or custom network visualisation tools.
 Example: 10 links collected per page, 3 pages deep, starting on mathematics, pruning nodes with < 10 connections, graphing using NetworkX:
 
 <img src="images/mathematics.png">
+<br><br>
+Example using a custom graphing tool:
+<img src="images/mathematics_custom.png">
