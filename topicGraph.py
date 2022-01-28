@@ -14,7 +14,7 @@ class TopicGraph:
     self.r = np.zeros((len(self.graph.c), 2))
 
     self.spacing = 0.2
-    self.k = 1
+    self.k = 0.01
 
     length = np.ceil(np.sqrt(len(self.graph.c)))
     grid = np.arange(length) * 50
@@ -31,13 +31,13 @@ class TopicGraph:
       
 
 
-  def step(self, dt=0.1 ):
+  def step(self, dt=0.01 ):
 
-    self.f = 0.1 * (-1*self.r + self.f[0])
+    self.f = 1 * (-1*self.r + self.f[0])
 
     for n in np.argwhere(self.graph.c.sum(axis=1) != 0):
 
-      self.f[n] += self.k * np.dot(self.graph.c[n], self.r - self.r[n])
+      # self.f[n] += self.k * np.dot(self.graph.c[n], self.r - self.r[n])
       self.v[n] += dt * self.f[n]
       new_x = self.r[n] + dt * self.v[n]
 

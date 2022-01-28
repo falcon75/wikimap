@@ -1,4 +1,3 @@
-
 import requests
 from bs4 import BeautifulSoup
 import matplotlib.pyplot as plt
@@ -6,6 +5,7 @@ import networkx as nx
 from topicGraph import TopicGraph
 import numpy as np
 from urllib.parse import unquote
+import pickle as pkl
 
 
 class Graph:
@@ -29,7 +29,6 @@ class Mapper:
       'User-Agent': 'My User Agent 1.0',
       'From': 'youremail@domain.com'
     }
-    
     self.n = 0
 
 
@@ -37,10 +36,8 @@ class Mapper:
 
     self.graph = Graph(10, 2)
 
-    self.graph.names = np.load(file + "/names.npy", allow_pickle=True)
-    self.graph.names_arr = list(np.load(file + "/names_arr.npy", allow_pickle=True))
-    self.graph.c = np.load(file + "/c.npy", allow_pickle=True)
-    self.graph.sizes = np.load(file + "/sizes.npy", allow_pickle=True)
+    with open("results/" + file, 'rb') as f:
+      self.graph = pkl.load(f)
 
 
   def map(self, iterations, links_per_page, startUrl, file):
@@ -61,12 +58,10 @@ class Mapper:
 
     self.scrapeViews()
 
-    np.save(file + "/names.npy", self.graph.names, allow_pickle=True)
-    np.save(file + "/names_arr.npy", self.graph.names_arr, allow_pickle=True)
-    np.save(file + "/c.npy", self.graph.c, allow_pickle=True)
-    np.save(file + "/sizes.npy", self.graph.sizes, allow_pickle=True)
-
+    with open("results/" + file, 'wb') as out:
+      pkl.dump(self.graph, out)
   
+
   def search(self, m):
 
     nextLayer = []
@@ -74,7 +69,7 @@ class Mapper:
 
     for url in self.searching:
 
-      print(":::: ", url)
+      print(":: ", url)
 
       page = requests.get(self.rootURL + url)
       soup = BeautifulSoup(page.content, "html.parser")
@@ -174,7 +169,7 @@ class Mapper:
 
     t = TopicGraph(self.graph)
 
-    t.simulate(50)
+    t.simulate(1000)
     fig, ax = plt.subplots(subplot_kw=dict(aspect="equal"))
     t.plot(ax, lines=True)
 
@@ -185,6 +180,6 @@ class Mapper:
 
 
 m = Mapper()
-# m.map(3, 10, "Mathematics", "3_10_mathematics")
-m.load('3_10_mathematics')
-m.draw(thresh=12)
+# m.map(3, 10, "Mathematics", "3_10_mathematics.pkl")
+m.load('3_10_mathematics.pkl')
+m.drawx(thresh=12)
