@@ -43,7 +43,6 @@ class Mapper:
     self.graph.sizes = np.load(file + "/sizes.npy", allow_pickle=True)
 
 
-
   def map(self, iterations, links_per_page, startUrl, file):
 
     self.graph = Graph(links_per_page, iterations)
@@ -74,7 +73,6 @@ class Mapper:
     print("Searching: ", self.searching)
 
     for url in self.searching:
-
 
       print(":::: ", url)
 
@@ -107,8 +105,6 @@ class Mapper:
               self.n += 1
               nextLayer.append(Url)
               
-            
-
     self.searching = nextLayer
 
 
@@ -124,9 +120,7 @@ class Mapper:
     views = 0
 
     statURL = "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia.org/all-access/all-agents/"+url+"/monthly/2021010100/2021053100"
-
     statpage = requests.get(statURL, headers=self.headers)
-
     json = statpage.json()
 
     if "items" in json:
@@ -138,11 +132,8 @@ class Mapper:
 
   def thresh(self, n):
 
-    print(self.graph.c[:20][:,:20])
-
     self.graph.c += np.transpose(self.graph.c)
 
-    print(self.graph.c[:20][:,:20])
     ind = np.where(self.graph.c.sum(axis=0) < n)
     self.graph.c[:,ind], self.graph.c[ind] = 0, 0
 
@@ -153,8 +144,6 @@ class Mapper:
     G.views = {}
 
     self.thresh(thresh)
-    
-    print(self.graph.c[:20][:,:20])
 
     for ind in np.where(self.graph.c.sum(axis=1) != 0)[0]:
 
@@ -167,8 +156,6 @@ class Mapper:
     for edge in np.transpose(l):
 
       G.add_edge(unquote(self.graph.names_arr[edge[0]]), unquote(self.graph.names_arr[edge[1]]))
-
-
 
     pos=nx.spring_layout(G)
     ax = plt.subplot()
